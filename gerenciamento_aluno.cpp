@@ -8,6 +8,18 @@ struct Aluno
     int Idade;
     float Notas[3];
     char Genero;
+    float Media = -1.0;
+    
+    float calcularMedia()
+    {
+        float soma = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            soma += Notas[i];
+        }
+        Media = soma / 3.0;
+        return Media;
+    }
 };
 
 void exibirMenu(int &OpcaoMenu)
@@ -148,6 +160,29 @@ void configurarNotas(float &NotaMedia, int &QuantidadeDeProvas)
     
 }
 
+
+void gerarRelatorioPercentualAprovados(Aluno vetorAluno[], int &Qtd, float &NotaMedia){
+
+    int aprovados = 0, reprovados = 0;
+    for(int index =0; index < Qtd; index++){
+        Aluno aluno = vetorAluno[index];
+        float media = aluno.Media == 0.0 ? aluno.calcularMedia() : aluno.Media;
+        bool aprovado = media >= NotaMedia;
+        if(aprovado){
+            aprovados++;
+        }else{
+            reprovados++;
+        }
+        
+    }
+    // percentual aprovados
+    float percentualAprovados = aprovados == Qtd ? 100.0 : (aprovados * 100.0) / Qtd;
+    float percentualReprovados = reprovados == 0.0 ? 0.0 :  (reprovados * 100.0) / Qtd;
+    printf("\n\tPercentual de alunos aprovados: %0.2f%%", percentualAprovados);
+    printf("\n\tPercentual de alunos reprovados: %0.2f%%", percentualReprovados);
+
+}
+
 void LimparBuffer()
 {
     int c;
@@ -167,25 +202,21 @@ int main()
     do
     {
         exibirMenu(OpcaoMenu);
-
+        printf("Opção %d escolhida", OpcaoMenu);
         switch (OpcaoMenu)
         {
         case 1:
-            printf("Opção %d escolhida", OpcaoMenu);
             configurarNotas(NotaMedia, QuantidadeDeProvas);
             break;
         case 2:
-            printf("Opção %d escolhida", OpcaoMenu);
             cadastrarAluno(nAluno, Qtd, vetorAluno, Soma, Maior, Menor, Resposta);
             break;
         case 3:
-            printf("Opção %d escolhida", OpcaoMenu);
+            gerarRelatorioPercentualAprovados(vetorAluno, Qtd, NotaMedia);
             break;
         case 4:
-            printf("Opção %d escolhida", OpcaoMenu);
             break;
         case 5:
-            printf("\nOpção %d escolhida", OpcaoMenu);
             break;
         case 0:
             printf("\nOpção %d escolhida", OpcaoMenu);
