@@ -10,6 +10,22 @@ struct Aluno
     char Genero;
 };
 
+void exibirMenu(int &OpcaoMenu)
+{
+
+    printf("\n\t============================================");
+    printf("\n\tBem Vindo ao Gerenciador de Alunos!");
+    printf("\n\tInforme o que deseja fazer de acordo com as instruções abaixo:\n");
+    printf("\n\t 1 - Configurar nota mínima para aprovação e quantidade de provas");
+    printf("\n\t 2 - Cadastrar alunos(as)");
+    printf("\n\t 3 - Gerar relatório com percentual de alunos(as) aprovados(as)/reprovados(as)");
+    printf("\n\t 4 - Gerar relatório com percentual de alunos(as) aprovados(as)/reprovados(as) com idade maior que 20");
+    printf("\n\t 5 - Gerar Relatório com os nome e médias dos alunos aprovados e reprovados");
+    printf("\n\t 0 - Sair");
+    printf("\n\t============================================\n\n");
+    scanf("%d", &OpcaoMenu);
+}
+
 void adicionaGenero(struct Aluno aluno, int nAluno)
 {
     aluno.Genero = ' ';
@@ -54,28 +70,15 @@ void adicionarIdade(Aluno aluno, int nAluno)
         printf("\nInforme a idade do %i° aluno: ", nAluno);
         scanf("%d", &aluno.Idade);
         isIdadeValida = aluno.Idade > 16 && aluno.Idade < 100;
-    } while (aluno.Idade == 0 || isIdadeValida);
+        if(!isIdadeValida){
+            printf("\n\tA idade informada %d é inválida, tente novamente com um valor entre 16 e 100", aluno.Idade);
+        }
+    } while (aluno.Idade == 0 || !isIdadeValida);
 }
 
-void configurarNotas()
-{
-}
 
-void LimparBuffer()
+void cadastrarAluno(int &nAluno, int &Qtd, Aluno vetorAluno[100], int &Soma, float &Maior, float &Menor, int &Resposta)
 {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-        ;
-}
-
-int main()
-{
-    setlocale(LC_ALL, "Portuguese");
-    // Estrutura de Dados
-    struct Aluno vetorAluno[100];
-    float Valor[1000], Maior, Menor;
-    int Resposta, Qtd, Soma, nAluno = 0;
-
     do
     {
         nAluno = Qtd + 1;
@@ -112,6 +115,88 @@ int main()
         Qtd++;
         getchar();
     } while (Resposta == 1);
+}
+
+
+void configurarNotas(float &NotaMedia, int &QuantidadeDeProvas)
+{
+    bool NotaValida = false;
+    do
+    {
+        printf("\nInforme o valor da média: ");
+        scanf("%f", &NotaMedia);
+        NotaValida = NotaMedia > 0.0 && NotaMedia < 10.0;
+        if(!NotaValida){
+            printf("\n\t A nota informada %0.2f é inválida! Tente novamente!\n", NotaMedia);
+            continue;
+        }
+        printf("\tA média foi definida para  %0.2f!\n", NotaMedia);
+    } while (!NotaValida);
+
+    bool QuantidadeProvasValida = false;
+    do
+    {
+        printf("\nInforme a quantidade de Provas: ");
+        scanf("%d", &QuantidadeDeProvas);
+        QuantidadeProvasValida = QuantidadeDeProvas > 0 && QuantidadeDeProvas < 10;
+        if(!QuantidadeProvasValida){
+            printf("\n\t A quantidade de provas informada %d é inválida! Tente novamente!", QuantidadeProvasValida);
+            continue;
+        }
+        printf("\tA quantidade de provas foi definida para %d!\n", NotaMedia);
+    } while (!QuantidadeProvasValida);
+    
+}
+
+void LimparBuffer()
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Portuguese");
+    // Estrutura de Dados
+    struct Aluno vetorAluno[100];
+    float Valor[1000], Maior, Menor;
+    float NotaMedia = 6.0;
+    int QuantidadeDeProvas = 3;
+    int Resposta, Qtd, Soma, nAluno, OpcaoMenu = 0;
+    do
+    {
+        exibirMenu(OpcaoMenu);
+
+        switch (OpcaoMenu)
+        {
+        case 1:
+            printf("Opção %d escolhida", OpcaoMenu);
+            configurarNotas(NotaMedia, QuantidadeDeProvas);
+            break;
+        case 2:
+            printf("Opção %d escolhida", OpcaoMenu);
+            cadastrarAluno(nAluno, Qtd, vetorAluno, Soma, Maior, Menor, Resposta);
+            break;
+        case 3:
+            printf("Opção %d escolhida", OpcaoMenu);
+            break;
+        case 4:
+            printf("Opção %d escolhida", OpcaoMenu);
+            break;
+        case 5:
+            printf("\nOpção %d escolhida", OpcaoMenu);
+            break;
+        case 0:
+            printf("\nOpção %d escolhida", OpcaoMenu);
+            return 1;
+        default:
+            printf("\tOpção inválida");
+            break;
+        }
+
+    } while (true);
+
     // Saída de dados
     printf("\nO maior valor: %0.2f", Maior);
     printf("\nO menor valor: %0.2f", Menor);
