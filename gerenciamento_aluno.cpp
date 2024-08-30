@@ -7,36 +7,59 @@ struct Aluno
     char Nome[30];
     int Idade;
     float Notas[3];
-    char Sexo;
+    char Genero;
 };
 
-
-void adicionaSexo(struct Aluno aluno, int nAluno){
-        aluno.Sexo = ' ';
-        bool sexoValido = false;
-        do
+void adicionaGenero(struct Aluno aluno, int nAluno)
+{
+    aluno.Genero = ' ';
+    bool generoValido = false;
+    do
+    {
+        if (aluno.Genero != ' ' && !generoValido)
         {
-            if (aluno.Sexo != ' ' && !sexoValido)
-            {
-                printf("\nValor inválido. Por favor, informe 'M' ou 'F'.\n");
-            }
-            printf("\nInforme o Sexo do %i° aluno: (F/M)", nAluno);
-            scanf("%s", &aluno.Sexo);
-            sexoValido = aluno.Sexo == 'M' || aluno.Sexo == 'F';
-        } while (!sexoValido || aluno.Sexo == ' ');
-
+            printf("\nValor inválido. Por favor, informe 'M' ou 'F'.\n");
+        }
+        printf("\nInforme o Genero do %i° aluno: (F/M)", nAluno);
+        scanf("%s", &aluno.Genero);
+        generoValido = aluno.Genero == 'M' || aluno.Genero == 'F' || aluno.Genero == 'm' || aluno.Genero == 'f';
+    } while (!generoValido || aluno.Genero == ' ');
 }
 
-void adicionarNotas(struct Aluno aluno, int nAluno){
+void adicionarNotas(struct Aluno aluno, int nAluno)
+{
     int qtdNotas = 1;
     do
     {
-        printf("\nInforme a %i° nota do %i aluno", qtdNotas, nAluno);
-        scanf("%f", aluno.Notas[qtdNotas-1]);
+        do
+        {
+            printf("\nInforme a %i° nota do %i° aluno", qtdNotas, nAluno);
+            scanf("%f", &aluno.Notas[qtdNotas - 1]);
+            // TODO: Notas menores que zero nem maiores que dez.
+        } while (aluno.Notas[qtdNotas - 1] < 0.0 || aluno.Notas[qtdNotas - 1] > 10.0);
+        qtdNotas++;
     } while (qtdNotas <= 3);
-    
 }
-// TODO: 
+
+void adicionarIdade(Aluno aluno, int nAluno)
+{
+    bool isIdadeValida = false;
+    aluno.Idade = 0;
+    do
+    {
+        if (aluno.Idade != 0 && !isIdadeValida)
+        {
+            printf("\nValor inválido! Informe um valor entre 16 e 100");
+        }
+        printf("\nInforme a idade do %i° aluno: ", nAluno);
+        scanf("%d", &aluno.Idade);
+        isIdadeValida = aluno.Idade > 16 && aluno.Idade < 100;
+    } while (aluno.Idade == 0 || isIdadeValida);
+}
+
+void configurarNotas()
+{
+}
 
 void LimparBuffer()
 {
@@ -60,11 +83,10 @@ int main()
         printf("\nInforme o nome do %i° aluno: (Até 30 caracteres): ", nAluno);
         scanf("%s", &vetorAluno[Qtd].Nome);
 
-        printf("\nInforme a idade do %i° aluno: ", nAluno);
-        scanf("%d", &vetorAluno[Qtd].Idade);
+        adicionarIdade(vetorAluno[Qtd], nAluno);
 
-        adicionaSexo(vetorAluno[Qtd], nAluno);
-        
+        adicionaGenero(vetorAluno[Qtd], nAluno);
+
         adicionarNotas(vetorAluno[Qtd], nAluno);
 
         Soma = Soma + vetorAluno[Qtd].Idade;
@@ -146,5 +168,4 @@ int main()
 
     // Saída de dados - Mediana
     printf("\nA mediana dos valores: %0.2f\n", mediana);
-    
 }
