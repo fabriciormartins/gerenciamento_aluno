@@ -48,7 +48,7 @@ void adicionaGenero(struct Aluno aluno, int nAluno)
         {
             printf("\nValor inválido. Por favor, informe 'M' ou 'F'.\n");
         }
-        printf("\nInforme o Genero do %i° aluno: (F/M)", nAluno);
+        printf("\nInforme o Genero do %i° aluno (F/M): ", nAluno);
         scanf("%s", &aluno.Genero);
         generoValido = aluno.Genero == 'M' || aluno.Genero == 'F' || aluno.Genero == 'm' || aluno.Genero == 'f';
     } while (!generoValido || aluno.Genero == ' ');
@@ -57,14 +57,17 @@ void adicionaGenero(struct Aluno aluno, int nAluno)
 void adicionarNotas(struct Aluno aluno, int nAluno)
 {
     int qtdNotas = 1;
+    bool NotaValida = false;
     do
     {
         do
         {
-            printf("\nInforme a %i° nota do %i° aluno", qtdNotas, nAluno);
+            printf("\nInforme a %i° nota do %i° aluno: ", qtdNotas, nAluno);
             scanf("%f", &aluno.Notas[qtdNotas - 1]);
             // TODO: Notas menores que zero nem maiores que dez.
-        } while (aluno.Notas[qtdNotas - 1] < 0.0 || aluno.Notas[qtdNotas - 1] > 10.0);
+
+            NotaValida = aluno.Notas[qtdNotas - 1] < 0.0 || aluno.Notas[qtdNotas - 1] > 10.0;
+        } while (!NotaValida);
         qtdNotas++;
     } while (qtdNotas <= 3);
 }
@@ -75,10 +78,6 @@ void adicionarIdade(Aluno aluno, int nAluno)
     aluno.Idade = 0;
     do
     {
-        if (aluno.Idade != 0 && !isIdadeValida)
-        {
-            printf("\nValor inválido! Informe um valor entre 16 e 100");
-        }
         printf("\nInforme a idade do %i° aluno: ", nAluno);
         scanf("%d", &aluno.Idade);
         isIdadeValida = aluno.Idade > 16 && aluno.Idade < 100;
@@ -122,7 +121,7 @@ void cadastrarAluno(int &nAluno, int &Qtd, Aluno vetorAluno[100], int &Soma, flo
                 Menor = vetorAluno[Qtd].Idade;
             }
         }
-        printf("\nDeseja informar a proxima idade?\n 1/Sim-2Nao\n");
+        printf("\nDeseja informar o próximo aluno?\n 1/Sim-2Nao\n");
         scanf("%d", &Resposta);
         Qtd++;
         getchar();
